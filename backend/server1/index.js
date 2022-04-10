@@ -29,11 +29,19 @@ app.post('/students', async(req, res)=>{
         `SELECT * FROM student`,
         function(err, results, fields) {
             let theIDs = []
+            let maxID = -1
             for(let i=0; i<results.length; i++)
             {
-                theIDs.push(results[i].STUDENT_ID)
+                if(!isNaN(results[i].STUDENT_ID))
+                {
+                    if(results[i].STUDENT_ID > maxID)
+                    {
+                        maxID = results[i].STUDENT_ID
+                    }
+                }
             }
-            let newID = Math.max(theIDs) + 1
+            let newID = parseInt(Math.max(maxID) + 1)
+            console.log(newID)
           connection.query(
             `INSERT INTO student VALUES (
                 ${newID},
@@ -87,7 +95,34 @@ app.get('/student/:id', async(req, res)=>{
 })
 
 app.put('/student/:id', async(req, res)=>{
-
+    let body = req.body
+    let theQuery =  `UPDATE student
+    SET
+    ${('salutation' in body) ? `SALUTATION =  "${body['salutation']}",` : '' }
+    ${('fName' in body) ? `FIRST_NAME = "${body['fName']}",` : '' }
+    ${('lName' in body) ? `LAST_NAME = "${body['lName']}",` : '' }
+    ${('address' in body) ? `STREET_ADDRESS =  "${body['address']}",` : '' }
+    ${('zip' in body) ? `ZIP =  "${body['zip']}",` : '' }
+    ${('phone' in body) ? `PHONE =  "${body['phone']}",` : '' }
+    ${('employer' in body) ? `EMPLOYER =  "${body['employer']}", ` : '' } 
+    MODIFIED_DATE = STR_TO_DATE("August 15 2017", "%M %d %Y")
+    WHERE student_id = ${req.params.id};`
+    console.log(theQuery)
+    connection.query(
+       theQuery,
+        function(err, results, fields) {
+            console.log(err)
+            console.log(results)
+            if(results.length == 0)
+            {
+                res.status = 404
+                return res.json({
+                    message: "Invalid ID"
+                });
+            }
+          return res.json(results[0])
+        }
+    );
 })
 
 app.delete('/student/:id', async(req, res)=>{
