@@ -6,7 +6,6 @@ var mysql = require('mysql2');
 app.use(express.json());
 var cors = require('cors')
 
-
 app.use(cors())
 
 var connection = mysql.createConnection({

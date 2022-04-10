@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div className="container container-fluid">
-          <h2 style={{margin: '20px auto'}}>Devang's Student Portal</h2>
+          <h2 style={{margin: '20px auto'}}>Devang's Student Portal (Server 1)</h2>
           <h5 style={{marginBottom: '10px auto'}}>2019BTECS00058 - ADS Assignment 8</h5>
           <AllTasks/>
         </div>
