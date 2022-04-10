@@ -111,16 +111,10 @@ app.put('/student/:id', async(req, res)=>{
     connection.query(
        theQuery,
         function(err, results, fields) {
-            console.log(err)
-            console.log(results)
-            if(results.length == 0)
-            {
-                res.status = 404
-                return res.json({
-                    message: "Invalid ID"
-                });
-            }
-          return res.json(results[0])
+            res.status(203)
+          return res.json({
+              message: 'Updated Successfully!'
+          })
         }
     );
 })
